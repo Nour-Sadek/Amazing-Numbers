@@ -10,18 +10,29 @@ public class Main {
         int number = checkingUserInput();
 
         // Checking if number is odd or even
-        String oddOrEven = statingOddOrEven(number);
-        System.out.println(oddOrEven);
+        boolean[] parity = checkParity(number);
+        boolean isEven = parity[0];
+        boolean isOdd = parity[1];
 
         // Checking if number is a buzz number
-        isBuzzNumber(number);
+        boolean isBuzz = isBuzzNumber(number);
+
+        // Checking if number is a duck number
+        boolean isDuck = isDuckNumber(number);
+
+        // Print the result
+        System.out.println("Properties of " + number);
+        System.out.println("\teven: " + isEven);
+        System.out.println("\todd: " + isOdd);
+        System.out.println("\tbuzz: " + isBuzz);
+        System.out.println("\tduck: " + isDuck);
     }
 
     public static int checkingUserInput() {
-        Pattern pattern = Pattern.compile("[1-9]([0-9]+)?");
+        Pattern pattern = Pattern.compile("^[0-9]*[1-9]+$|^[1-9]+[0-9]*$");
         while (true) {
             String userInput = gettingUserInput();
-            if (userInput == null || !pattern.matcher(userInput).matches()) {
+            if (userInput == null || !pattern.matcher(userInput).matches() || userInput.equals("0")) {
                 System.out.println("This number is not natural!\n");
             } else {
                 int number = Integer.parseInt(userInput);
@@ -36,17 +47,17 @@ public class Main {
         return userInput;
     }
 
-    public static String statingOddOrEven(int number) {
-        String statement;
+    public static boolean[] checkParity(int number) {
+        boolean[] statement = new boolean[2];
         if (number % 2 == 0) {
-            statement = "This number is Even.";
+            statement[0] = true;
         } else {
-            statement = "This number is Odd.";
+            statement[1] = true;
         }
         return statement;
     }
 
-    public static void isBuzzNumber(int number) {
+    public static boolean isBuzzNumber(int number) {
         boolean isDivisibleBy7;
         boolean endsWithSeven;
 
@@ -57,31 +68,15 @@ public class Main {
         endsWithSeven = String.valueOf(number).endsWith("7");
 
         // Determining if number is a buzz number
-        statingIfBuzz(isDivisibleBy7, endsWithSeven);
-        System.out.println("Explanation:");
-
-        // Determing the explanation
-        outputExplanation(isDivisibleBy7, endsWithSeven, number);
+        return isDivisibleBy7 || endsWithSeven;
     }
 
-    public static void statingIfBuzz(boolean isDivisibleBy7, boolean endsWithSeven) {
-        boolean isBuzz = isDivisibleBy7 || endsWithSeven;
-        if (isBuzz) {
-            System.out.println("It is a Buzz number.");
+    public static boolean isDuckNumber(int number) {
+        String stringNumber = String.valueOf(number);
+        if (stringNumber.length() == 1) {
+            return false;
         } else {
-            System.out.println("It is not a Buzz number.");
-        }
-    }
-
-    public static void outputExplanation(boolean isDivisibleBy7, boolean endsWithSeven, int number) {
-        if (isDivisibleBy7 && endsWithSeven) {
-            System.out.println(number + " is divisible by 7 and ends with 7.");
-        } else if (!isDivisibleBy7 && endsWithSeven) {
-            System.out.println(number + " ends with 7.");
-        } else if (isDivisibleBy7 && !endsWithSeven) {
-            System.out.println(number + " is divisible by 7.");
-        } else {
-            System.out.println(number + " is neither divisible by 7 nor does it end with 7.");
+            return stringNumber.substring(1).contains("0");
         }
     }
 
