@@ -6,48 +6,71 @@ public class Main {
     static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
-        // getting and checking user input
-        int number = checkingUserInput();
+        // Greeting the user
+        System.out.println("""
+        Welcome to Amazing Numbers!
 
-        // Checking if number is odd or even
-        boolean[] parity = checkParity(number);
-        boolean isEven = parity[0];
-        boolean isOdd = parity[1];
+        Supported requests:
+        - enter a natural number to know its properties;
+        - enter 0 to exit.
+        """);
 
-        // Checking if number is a buzz number
-        boolean isBuzz = isBuzzNumber(number);
+        while (true) {
+            // getting and checking user input
+            long number = checkingUserInput();
+            System.out.println();
+            if (number == -1L) {
+                System.out.println("Goodbye!");
+                break;
+            }
 
-        // Checking if number is a duck number
-        boolean isDuck = isDuckNumber(number);
+            // Checking if number is odd or even
+            boolean[] parity = checkParity(number);
+            boolean isEven = parity[0];
+            boolean isOdd = parity[1];
 
-        // Print the result
-        System.out.println("Properties of " + number);
-        System.out.println("\teven: " + isEven);
-        System.out.println("\todd: " + isOdd);
-        System.out.println("\tbuzz: " + isBuzz);
-        System.out.println("\tduck: " + isDuck);
+            // Checking if number is a buzz number
+            boolean isBuzz = isBuzzNumber(number);
+
+            // Checking if number is a duck number
+            boolean isDuck = isDuckNumber(number);
+
+            // Checking if number is a palindromic number
+            boolean isPalindromic = isPalindromicNumber(number);
+
+            // Print the result
+            System.out.println("Properties of " + number);
+            System.out.println("\teven: " + isEven);
+            System.out.println("\todd: " + isOdd);
+            System.out.println("\tbuzz: " + isBuzz);
+            System.out.println("\tduck: " + isDuck);
+            System.out.println("\tpalindromic: " + isPalindromic);
+            System.out.println();
+        }
     }
 
-    public static int checkingUserInput() {
+    public static long checkingUserInput() {
         Pattern pattern = Pattern.compile("^[0-9]*[1-9]+$|^[1-9]+[0-9]*$");
         while (true) {
             String userInput = gettingUserInput();
-            if (userInput == null || !pattern.matcher(userInput).matches() || userInput.equals("0")) {
-                System.out.println("This number is not natural!\n");
+            if (userInput.equals("0")) {
+                return -1L;
+            } else if (userInput == null || !pattern.matcher(userInput).matches()) {
+                System.out.println("The first parameter should be a natural number or zero.\n");
             } else {
-                int number = Integer.parseInt(userInput);
+                long number = Long.parseLong(userInput);
                 return number;
             }
         }
     }
 
     public static String gettingUserInput() {
-        System.out.println("Enter a natural number:");
+        System.out.println("Enter a request:");
         String userInput = scanner.nextLine();
         return userInput;
     }
 
-    public static boolean[] checkParity(int number) {
+    public static boolean[] checkParity(long number) {
         boolean[] statement = new boolean[2];
         if (number % 2 == 0) {
             statement[0] = true;
@@ -57,7 +80,7 @@ public class Main {
         return statement;
     }
 
-    public static boolean isBuzzNumber(int number) {
+    public static boolean isBuzzNumber(long number) {
         boolean isDivisibleBy7;
         boolean endsWithSeven;
 
@@ -71,13 +94,20 @@ public class Main {
         return isDivisibleBy7 || endsWithSeven;
     }
 
-    public static boolean isDuckNumber(int number) {
+    public static boolean isDuckNumber(long number) {
         String stringNumber = String.valueOf(number);
         if (stringNumber.length() == 1) {
             return false;
         } else {
             return stringNumber.substring(1).contains("0");
         }
+    }
+
+    public static boolean isPalindromicNumber(long number) {
+        String stringNumber = String.valueOf(number);
+        StringBuilder stringToReverse = new StringBuilder(stringNumber);
+        stringToReverse.reverse();
+        return stringNumber.equals(stringToReverse.toString());
     }
 
 }
