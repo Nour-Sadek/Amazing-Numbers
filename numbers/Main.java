@@ -77,7 +77,7 @@ public class Main {
                     return numbers;
                 }
             } else {
-                System.out.println("Please don't input more than two parameters!");
+                System.out.println("Please don't input more than two parameters!\n");
             }
         }
     }
@@ -144,6 +144,7 @@ public class Main {
     }
 
     public static void outputProperties(long number) {
+        // Creating the start of the statement
         StringBuilder statement = new StringBuilder(String.valueOf(number));
         statement.append(" is ");
 
@@ -152,36 +153,13 @@ public class Main {
         boolean isEven = parity[0];
         boolean isOdd = parity[1];
 
-        // Checking if number is a buzz number
-        boolean isBuzz = isBuzzNumber(number);
-
-        // Checking if number is a duck number
-        boolean isDuck = isDuckNumber(number);
-
-        // Checking if number is a palindromic number
-        boolean isPalindromic = isPalindromicNumber(number);
-
-        // Checking if number is a gapful number
-        boolean isGapful = isGapfulNumber(number);
-
         // Populating the statement
-        if (isBuzz) {
-            statement.append("buzz, ");
-        }
-        if (isDuck) {
-            statement.append("duck, ");
-        }
-        if (isPalindromic) {
-            statement.append("palindromic, ");
-        }
-        if (isGapful) {
-            statement.append("gapful, ");
-        }
-        if (isOdd) {
-            statement.append("odd");
-        } else {
-            statement.append("even");
-        }
+        if (isBuzzNumber(number)) statement.append("buzz, ");
+        if (isDuckNumber(number)) statement.append("duck, ");
+        if (isPalindromicNumber(number)) statement.append("palindromic, ");
+        if (isGapfulNumber(number)) statement.append("gapful, ");
+        if (isEven) statement.append("even");
+        if (isOdd) statement.append("odd");
 
         System.out.println(statement);
     }
@@ -192,24 +170,12 @@ public class Main {
         boolean isEven = parity[0];
         boolean isOdd = parity[1];
 
-        // Checking if number is a buzz number
-        boolean isBuzz = isBuzzNumber(number);
-
-        // Checking if number is a duck number
-        boolean isDuck = isDuckNumber(number);
-
-        // Checking if number is a palindromic number
-        boolean isPalindromic = isPalindromicNumber(number);
-
-        // Checking if number is a gapful number
-        boolean isGapful = isGapfulNumber(number);
-
         // Print the result
         System.out.println("Properties of " + number);
-        System.out.println("\tbuzz: " + isBuzz);
-        System.out.println("\tduck: " + isDuck);
-        System.out.println("\tpalindromic: " + isPalindromic);
-        System.out.println("\tgapful: " + isGapful);
+        System.out.println("\tbuzz: " + isBuzzNumber(number));
+        System.out.println("\tduck: " + isDuckNumber(number));
+        System.out.println("\tpalindromic: " + isPalindromicNumber(number));
+        System.out.println("\tgapful: " + isGapfulNumber(number));
         System.out.println("\teven: " + isEven);
         System.out.println("\todd: " + isOdd);
         System.out.println();
