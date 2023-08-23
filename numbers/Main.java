@@ -4,11 +4,12 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 import java.util.List;
 import java.util.Arrays;
+import java.util.ArrayList;
 
 public class Main {
     static Scanner scanner = new Scanner(System.in);
     static final List<String> PROPERTIES = Arrays.asList("BUZZ", "DUCK", "PALINDROMIC", "GAPFUL", "SPY",
-            "SQUARE", "SUNNY", "JUMPING","EVEN", "ODD");
+            "SQUARE", "SUNNY", "JUMPING", "EVEN", "ODD");
 
     public static void main(String[] args) {
         // Greeting the user
@@ -25,45 +26,27 @@ public class Main {
                 break;
             }
 
-            if (numbers.length == 2) {
+            if (numbers.length == 2) { // Properties aren't included
+                long number = Long.parseLong(numbers[0]);
                 long range = Long.parseLong(numbers[1]);
 
                 if (range == 0L) {
-                    long number = Long.parseLong(numbers[0]);
                     outputOneNumberProperties(number);
                 } else {
-                    long number = Long.parseLong(numbers[0]);
                     long limit = number + range;
-                    for (; number < limit; number++) {
-                        outputProperties(number);
-                    }
+                    for (; number < limit; number++) outputProperties(number);
                     System.out.println();
                 }
-            } else if (numbers.length == 3) { // There is one property included
+            } else { // Properties are included
                 long number = Long.parseLong(numbers[0]);
                 long range = Long.parseLong(numbers[1]);
-                List<String> property = Arrays.asList(numbers[2]);
+                List<String> property = Arrays.asList(Arrays.copyOfRange(numbers, 2, numbers.length));
 
                 int counter = 0;
 
                 for (; counter < range; number++) {
                     int propertyCounter = numPropertiesSatisfied(property, number);
-                    if (propertyCounter == 1) {
-                        outputProperties(number);
-                        counter++;
-                    }
-                }
-                System.out.println();
-            } else { // There are two properties included
-                long number = Long.parseLong(numbers[0]);
-                long range = Long.parseLong(numbers[1]);
-                List<String> property = Arrays.asList(numbers[2], numbers[3]);
-
-                int counter = 0;
-
-                for (; counter < range; number++) {
-                    int propertyCounter = numPropertiesSatisfied(property, number);
-                    if (propertyCounter == 2) {
+                    if (propertyCounter == property.size()) {
                         outputProperties(number);
                         counter++;
                     }
@@ -77,111 +60,76 @@ public class Main {
         Pattern pattern = Pattern.compile("^[0-9]*[1-9]+$|^[1-9]+[0-9]*$");
         while (true) {
             String userInput = gettingUserInput();
+
             if (userInput.isEmpty()) {
                 System.out.println();
                 printSupportedRequests();
                 continue;
             }
+
             String[] userInputs = userInput.split(" ");
-            if (userInputs.length == 1) {
-                String input = userInputs[0];
 
-                if (input.equals("0")) {
-                    return new String[] {"-1"};
-                } else if (!pattern.matcher(input).matches()) {
-                    System.out.println("The first parameter should be a natural number or zero.\n");
-                } else {
-                    String[] numbers = new String[] {input, "0"};
-                    return numbers;
-                }
-            } else if (userInputs.length == 2) {
-                String firstNumber = userInputs[0];
-                String secondNumber = userInputs[1];
+            // Check if first input is natural or zero
+            String firstNumber = userInputs[0];
 
-                // Checking the first number
-                if (firstNumber.equals("0")) {
-                    System.out.println("If two parameters are given, the first number should not be zero.\n");
-                    continue;
-                } else if (!pattern.matcher(firstNumber).matches()) {
-                    System.out.println("The first parameter should be a natural number or zero.\n");
-                    continue;
-                }
+            if (firstNumber.equals("0") && userInputs.length == 1) {
+                return new String[] {"-1"};
+            } else if (!pattern.matcher(firstNumber).matches()) {
+                System.out.println("The first parameter should be a natural number or zero.\n");
+                continue;
+            } else if (userInputs.length == 1) {
+                String[] numbers = {firstNumber, "0"};
+                return numbers;
+            }
 
-                // Checking the second number
-                if (!pattern.matcher(secondNumber).matches()) {
-                    System.out.println("The second parameter should be a natural number.\n");
-                } else {
+            // If this while loop continues, that means userInputs has more than one value
+            String secondNumber = userInputs[1];
+
+            // Checking the second number
+            if (!pattern.matcher(secondNumber).matches()) {
+                System.out.println("The second parameter should be a natural number.\n");
+                continue;
+            }
+
+            if (userInputs.length == 2) { // Properties weren't included
                     String[] numbers = new String[] {firstNumber, secondNumber};
                     return numbers;
-                }
-            } else if (userInputs.length == 3) {
-                String firstNumber = userInputs[0];
-                String secondNumber = userInputs[1];
-                String property = userInputs[2];
+            } else { // Properties were included
+                List<String> originalProperties = Arrays.asList(Arrays.copyOfRange(userInputs, 2, userInputs.length));
+                ArrayList<String> properties = new ArrayList<String>();
+                ArrayList<String> unavailableProperties = new ArrayList<String>();
 
-                // Checking the first number
-                if (firstNumber.equals("0")) {
-                    System.out.println("If two parameters are given, the first number should not be zero.\n");
-                    continue;
-                } else if (!pattern.matcher(firstNumber).matches()) {
-                    System.out.println("The first parameter should be a natural number or zero.\n");
-                    continue;
+                // Checking if any property the user provided is invalid
+                for (String property: originalProperties) {
+                    if (!PROPERTIES.contains(property.toUpperCase())) {
+                        unavailableProperties.add(property.toUpperCase());
+                    }
+                    properties.add(property.toUpperCase());
                 }
 
-                // Checking the second number
-                if (!pattern.matcher(secondNumber).matches()) {
-                    System.out.println("The second parameter should be a natural number.\n");
-                    continue;
-                }
-
-                // Checking the property
-                if (!PROPERTIES.contains(property.toUpperCase())) {
-                    System.out.println("The property [" + property.toUpperCase() + "] is wrong.");
+                if (!unavailableProperties.isEmpty()) { // Some properties were invalid
+                    if (unavailableProperties.size() == 1) {
+                        System.out.println("The property " + unavailableProperties + " is wrong.");
+                    } else {
+                        System.out.println("The properties " + unavailableProperties + " are wrong.");
+                    }
                     System.out.println("Available properties: " + PROPERTIES);
                     System.out.println();
-                } else {
-                    String[] numbers = new String[] {firstNumber, secondNumber, property.toUpperCase()};
-                    return numbers;
+                } else { // All properties provided were valid
+                    // Checking if some were mutually exclusive
+                    if (areMutuallyExclusive(properties)) {
+                        System.out.println("The request contains mutually exclusive properties: " + properties);
+                        System.out.println("There are no numbers with these properties.\n");
+                    } else { // Everything is good :)
+                        ArrayList<String> temp = new ArrayList<String>();
+                        temp.add(firstNumber);
+                        temp.add(secondNumber);
+                        temp.addAll(properties);
+                        String[] numbers = new String[temp.size()];
+                        numbers = temp.toArray(numbers);
+                        return numbers;
+                    }
                 }
-            } else if (userInputs.length == 4) {
-                String firstNumber = userInputs[0];
-                String secondNumber = userInputs[1];
-                List<String> property = Arrays.asList(userInputs[2].toUpperCase(), userInputs[3].toUpperCase());
-
-                // Checking the first number
-                if (firstNumber.equals("0")) {
-                    System.out.println("If two parameters are given, the first number should not be zero.\n");
-                    continue;
-                } else if (!pattern.matcher(firstNumber).matches()) {
-                    System.out.println("The first parameter should be a natural number or zero.\n");
-                    continue;
-                }
-
-                // Checking the second number
-                if (!pattern.matcher(secondNumber).matches()) {
-                    System.out.println("The second parameter should be a natural number.\n");
-                    continue;
-                }
-
-                // Checking the properties
-                if (!PROPERTIES.contains(property.get(0)) && !PROPERTIES.contains(property.get(1))) {
-                    System.out.println("The properties " + property + " are wrong.");
-                    System.out.println("Available properties: " + PROPERTIES);
-                    System.out.println();
-                } else if (!PROPERTIES.contains(property.get(0))) {
-                    outputWrongPropertyMessage(property.get(0));
-                } else if (!PROPERTIES.contains(property.get(1))) {
-                    outputWrongPropertyMessage(property.get(1));
-                } else if (areMutuallyExclusive(property)) {
-                    System.out.println("The request contains mutually exclusive properties: " + property);
-                    System.out.println("There are no numbers with these properties.\n");
-                } else {
-                    String[] numbers = new String[] {firstNumber, secondNumber, property.get(0), property.get(1)};
-                    return numbers;
-                }
-
-            } else {
-                System.out.println("Please don't input more than four parameters!\n");
             }
         }
     }
