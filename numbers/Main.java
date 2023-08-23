@@ -7,8 +7,8 @@ import java.util.Arrays;
 
 public class Main {
     static Scanner scanner = new Scanner(System.in);
-    static final List<String> PROPERTIES = Arrays.asList(new String[] {"BUZZ", "DUCK", "PALINDROMIC", "GAPFUL", "SPY",
-            "SQUARE", "SUNNY", "EVEN", "ODD"});
+    static final List<String> PROPERTIES = Arrays.asList("BUZZ", "DUCK", "PALINDROMIC", "GAPFUL", "SPY",
+            "SQUARE", "SUNNY", "JUMPING","EVEN", "ODD");
 
     public static void main(String[] args) {
         // Greeting the user
@@ -201,16 +201,9 @@ public class Main {
     }
 
     public static boolean isBuzzNumber(long number) {
-        boolean isDivisibleBy7;
-        boolean endsWithSeven;
+        boolean isDivisibleBy7 = (number % 7) == 0;
+        boolean endsWithSeven = String.valueOf(number).endsWith("7");
 
-        // Checking if number is divisible by 7
-        isDivisibleBy7 = (number % 7) == 0;
-
-        // Checking if number ends with 7
-        endsWithSeven = String.valueOf(number).endsWith("7");
-
-        // Determining if number is a buzz number
         return isDivisibleBy7 || endsWithSeven;
     }
 
@@ -268,62 +261,44 @@ public class Main {
         return isSquareNumber(number + 1);
     }
 
+    public static boolean isJumpingNumber(long number) {
+        String stringNumber = String.valueOf(number);
+        int prevDigit = Integer.parseInt(String.valueOf(stringNumber.charAt(0)));
+
+        for (int i = 1; i < stringNumber.length(); i++) {
+            int currDigit = Integer.parseInt(String.valueOf(stringNumber.charAt(i)));
+            if (Math.abs(currDigit - prevDigit) != 1) {
+                return false;
+            }
+            prevDigit = currDigit;
+        }
+
+        return true;
+    }
+
     public static int numPropertiesSatisfied(List<String> requiredProperties, long number) {
         int counter = 0;
-        if (requiredProperties.contains("BUZZ")) {
-            if (isBuzzNumber(number)) {
-                counter++;
-            }
-        }
-        if (requiredProperties.contains("DUCK")) {
-            if (isDuckNumber(number)) {
-                counter++;
-            }
-        }
-        if (requiredProperties.contains("PALINDROMIC")) {
-            if (isPalindromicNumber(number)) {
-                counter++;
-            }
-        }
-        if (requiredProperties.contains("GAPFUL")) {
-            if (isGapfulNumber(number)) {
-                counter++;
-            }
-        }
-        if (requiredProperties.contains("SPY")) {
-            if (isSpyNumber(number)) {
-                counter++;
-            }
-        }
-        if (requiredProperties.contains("SQUARE")) {
-            if (isSquareNumber(number)) {
-                counter++;
-            }
-        }
-        if (requiredProperties.contains("SUNNY")) {
-            if (isSunnyNumber(number)) {
-                counter++;
-            }
-        }
-        if (requiredProperties.contains("EVEN")) {
-            if (isEven(number)) {
-                counter++;
-            }
-        }
-        if (requiredProperties.contains("ODD")) {
-            if (isOdd(number)) {
-                counter++;
-            }
-        }
+
+        if (requiredProperties.contains("BUZZ") && isBuzzNumber(number)) counter++;
+        if (requiredProperties.contains("DUCK") && isDuckNumber(number)) counter++;
+        if (requiredProperties.contains("PALINDROMIC") && isPalindromicNumber(number)) counter++;
+        if (requiredProperties.contains("GAPFUL") && isGapfulNumber(number)) counter++;
+        if (requiredProperties.contains("SPY") && isSpyNumber(number)) counter++;
+        if (requiredProperties.contains("SQUARE") && isSquareNumber(number)) counter++;
+        if (requiredProperties.contains("SUNNY") && isSunnyNumber(number)) counter++;
+        if (requiredProperties.contains("JUMPING") && isJumpingNumber(number)) counter++;
+        if (requiredProperties.contains("EVEN") && isEven(number)) counter++;
+        if (requiredProperties.contains("ODD") && isOdd(number)) counter++;
+
         return counter;
     }
 
     public static boolean areMutuallyExclusive(List<String> requiredProperties) {
-        List<String> m1 = Arrays.asList(new String[] {"ODD", "EVEN"});
-        List<String> m2 = Arrays.asList(new String[] {"DUCK", "SPY"});
-        List<String> m3 = Arrays.asList(new String[] {"SUNNY", "SQUARE"});
+        List<String> m1 = Arrays.asList("ODD", "EVEN");
+        List<String> m2 = Arrays.asList("DUCK", "SPY");
+        List<String> m3 = Arrays.asList("SUNNY", "SQUARE");
 
-        return (m1.containsAll(requiredProperties) || m2.containsAll(requiredProperties) || m3.containsAll(requiredProperties));
+        return (requiredProperties.containsAll(m1) || requiredProperties.containsAll(m2) || requiredProperties.containsAll(m3));
     }
 
     public static void outputWrongPropertyMessage(String property) {
@@ -345,6 +320,7 @@ public class Main {
         if (isSpyNumber(number)) statement.append("spy, ");
         if (isSquareNumber(number)) statement.append("square, ");
         if (isSunnyNumber(number)) statement.append("sunny, ");
+        if (isJumpingNumber(number)) statement.append("jumping, ");
         if (isEven(number)) statement.append("even");
         if (isOdd(number)) statement.append("odd");
 
@@ -360,6 +336,7 @@ public class Main {
         System.out.println("\tspy: " + isSpyNumber(number));
         System.out.println("\tsquare: " + isSquareNumber(number));
         System.out.println("\tsunny: " + isSunnyNumber(number));
+        System.out.println("\tjumping: " + isJumpingNumber(number));
         System.out.println("\teven: " + isEven(number));
         System.out.println("\todd: " + isOdd(number));
         System.out.println();
