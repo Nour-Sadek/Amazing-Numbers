@@ -16,7 +16,7 @@ This program can identify whether a number has each of the following 12 properti
 - *Square*: A number is a square number or a perfect square if it is an integer that is the square of an integer.
 - *Sunny*: A number __N__ is a sunny number if __N + 1__ is a perfect square number.
 - *Jumping*: A number is a jumping number if the adjacent digits inside the number differ by 1. Note that the difference between 9 and 0 is not considered as 1. For example, 78987 and 4343456 are jumping numbers, but 796 and 89098 are not.
-- *Happy*: A number is a happy number if it is a number that reaches 1 after a sequence during which the number is replaced by the sum of each digit squared. For example, 13 is a happy number since __1__^2^ + __3__^2^ = 10 which leads to __1__^2^ + __0__^2^ = __1__.
+- *Happy*: A number is a happy number if it is a number that reaches 1 after a sequence during which the number is replaced by the sum of each digit squared. For example, 13 is a happy number since __1__^2 + __3__^2 = 10 which leads to __1__^2 + __0__^2 = __1__.
 - *Sad*: A sad number is a number that is not happy.
 
 Once the program starts, the user will be given a list of all possible requests.
@@ -125,7 +125,7 @@ HyperSkill describes each of its four available difficulty levels:
 
 This repository contains:
 
-    numbers repository - Contains the numbers.Main java class that contains the program.
+    numbers package - Contains the numbers.Main java class that contains the program.
 
 Project was built using java version 8 update 381
 
