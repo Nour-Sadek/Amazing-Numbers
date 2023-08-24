@@ -5,6 +5,7 @@ import java.util.regex.Pattern;
 import java.util.List;
 import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Main {
     static Scanner scanner = new Scanner(System.in);
@@ -78,7 +79,7 @@ public class Main {
             if (firstNumber.equals("0") && userInputs.length == 1) {
                 return new String[] {"-1"};
             } else if (!pattern.matcher(firstNumber).matches()) {
-                System.out.println("The first parameter should be a natural number or zero.\n");
+                System.out.println("The first parameter should be a natural number or zero if only one parameter is provided.\n");
                 continue;
             } else if (userInputs.length == 1) {
                 String[] numbers = {firstNumber, "0"};
@@ -234,7 +235,7 @@ public class Main {
     public static boolean isHappyNumber(long number) {
         String stringNumber = String.valueOf(number);
 
-        while (stringNumber.length() != 1) {
+        do {
             int sum = 0;
 
             for (char ch: stringNumber.toCharArray()) {
@@ -242,7 +243,7 @@ public class Main {
             }
 
             stringNumber = Integer.toString(sum);
-        }
+        } while (stringNumber.length() != 1);
 
         return stringNumber.equals("1");
     }
@@ -254,18 +255,33 @@ public class Main {
     public static int numPropertiesSatisfied(List<String> requiredProperties, long number) {
         int counter = 0;
 
-        if (requiredProperties.contains("BUZZ") && isBuzzNumber(number)) counter++;
-        if (requiredProperties.contains("DUCK") && isDuckNumber(number)) counter++;
-        if (requiredProperties.contains("PALINDROMIC") && isPalindromicNumber(number)) counter++;
-        if (requiredProperties.contains("GAPFUL") && isGapfulNumber(number)) counter++;
-        if (requiredProperties.contains("SPY") && isSpyNumber(number)) counter++;
-        if (requiredProperties.contains("SQUARE") && isSquareNumber(number)) counter++;
-        if (requiredProperties.contains("SUNNY") && isSunnyNumber(number)) counter++;
-        if (requiredProperties.contains("JUMPING") && isJumpingNumber(number)) counter++;
-        if (requiredProperties.contains("HAPPY") && isHappyNumber(number)) counter++;
-        if (requiredProperties.contains("SAD") && isSadNumber(number)) counter++;
-        if (requiredProperties.contains("EVEN") && isEven(number)) counter++;
-        if (requiredProperties.contains("ODD") && isOdd(number)) counter++;
+        // Increase counter if property is included in requiredProperties and number has this property
+        if (requiredProperties.contains("BUZZ") && isBuzzNumber(number)) counter += Collections.frequency(requiredProperties, "BUZZ");
+        if (requiredProperties.contains("DUCK") && isDuckNumber(number)) counter += Collections.frequency(requiredProperties, "DUCK");
+        if (requiredProperties.contains("PALINDROMIC") && isPalindromicNumber(number)) counter += Collections.frequency(requiredProperties, "PALINDROMIC");
+        if (requiredProperties.contains("GAPFUL") && isGapfulNumber(number)) counter += Collections.frequency(requiredProperties, "GAPFUL");
+        if (requiredProperties.contains("SPY") && isSpyNumber(number)) counter += Collections.frequency(requiredProperties, "SPY");
+        if (requiredProperties.contains("SQUARE") && isSquareNumber(number)) counter += Collections.frequency(requiredProperties, "SQUARE");
+        if (requiredProperties.contains("SUNNY") && isSunnyNumber(number)) counter += Collections.frequency(requiredProperties, "SUNNY");
+        if (requiredProperties.contains("JUMPING") && isJumpingNumber(number)) counter += Collections.frequency(requiredProperties, "JUMPING");
+        if (requiredProperties.contains("HAPPY") && isHappyNumber(number)) counter += Collections.frequency(requiredProperties, "HAPPY");
+        if (requiredProperties.contains("SAD") && isSadNumber(number)) counter += Collections.frequency(requiredProperties, "SAD");
+        if (requiredProperties.contains("EVEN") && isEven(number)) counter += Collections.frequency(requiredProperties, "EVEN");
+        if (requiredProperties.contains("ODD") && isOdd(number)) counter += Collections.frequency(requiredProperties, "ODD");
+
+        // Increase counter if -property is included in requiredProperties and number doesn't have this property
+        if (requiredProperties.contains("-BUZZ") && !isBuzzNumber(number)) counter += Collections.frequency(requiredProperties, "-BUZZ");
+        if (requiredProperties.contains("-DUCK") && !isDuckNumber(number)) counter += Collections.frequency(requiredProperties, "-DUCK");
+        if (requiredProperties.contains("-PALINDROMIC") && !isPalindromicNumber(number)) counter += Collections.frequency(requiredProperties, "-PALINDROMIC");
+        if (requiredProperties.contains("-GAPFUL") && !isGapfulNumber(number)) counter += Collections.frequency(requiredProperties, "-GAPFUL");
+        if (requiredProperties.contains("-SPY") && !isSpyNumber(number)) counter += Collections.frequency(requiredProperties, "-SPY");
+        if (requiredProperties.contains("-SQUARE") && !isSquareNumber(number)) counter += Collections.frequency(requiredProperties, "-SQUARE");
+        if (requiredProperties.contains("-SUNNY") && !isSunnyNumber(number)) counter += Collections.frequency(requiredProperties, "-SUNNY");
+        if (requiredProperties.contains("-JUMPING") && !isJumpingNumber(number)) counter += Collections.frequency(requiredProperties, "-JUMPING");
+        if (requiredProperties.contains("-HAPPY") && !isHappyNumber(number)) counter += Collections.frequency(requiredProperties, "-HAPPY");
+        if (requiredProperties.contains("-SAD") && !isSadNumber(number)) counter += Collections.frequency(requiredProperties, "-SAD");
+        if (requiredProperties.contains("-EVEN") && !isEven(number)) counter += Collections.frequency(requiredProperties, "-EVEN");
+        if (requiredProperties.contains("-ODD") && !isOdd(number)) counter += Collections.frequency(requiredProperties, "-ODD");
 
         return counter;
     }
@@ -341,12 +357,12 @@ public class Main {
     public static void printSupportedRequests() {
         System.out.println("""
                 Supported requests:
-                - enter a natural number to know its properties;\s
+                - enter a natural number to know its properties;
                 - enter two natural numbers to obtain the properties of the list:
                   * the first parameter represents a starting number;
-                  * the second parameter shows how many consecutive numbers are to be printed;
-                - two natural numbers and a property to search for;
-                - two natural numbers and two properties to search for;
+                  * the second parameter shows how many consecutive numbers are to be processed;
+                - two natural numbers and properties to search for;
+                - a property preceded by minus must not be present in numbers;
                 - separate the parameters with one space;
                 - enter 0 to exit.
                 """);
