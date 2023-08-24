@@ -131,4 +131,6 @@ Project was built using java version 8 update 381
 
 # How to Run
 
-Download the numbers repository to your local repository and open the project in your choice IDE and run the project.
+Download the numbers repository to your machine. 
+Create a new project in IntelliJ IDEA, then move the downloaded numbers repository to the src folder, 
+then run the numbers.Main java class.
