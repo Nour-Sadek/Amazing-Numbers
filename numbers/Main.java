@@ -11,6 +11,9 @@ public class Main {
     static final List<String> PROPERTIES = Arrays.asList("BUZZ", "DUCK", "PALINDROMIC", "GAPFUL", "SPY",
             "SQUARE", "SUNNY", "JUMPING", "HAPPY", "SAD", "EVEN", "ODD");
 
+    static final List<String> MINUS_PROPERTIES = Arrays.asList("-BUZZ", "-DUCK", "-PALINDROMIC", "-GAPFUL", "-SPY",
+            "-SQUARE", "-SUNNY", "-JUMPING", "-HAPPY", "-SAD", "-EVEN", "-ODD");
+
     public static void main(String[] args) {
         // Greeting the user
         System.out.println("Welcome to Amazing Numbers!\n");
@@ -101,9 +104,8 @@ public class Main {
 
                 // Checking if any property the user provided is invalid
                 for (String property: originalProperties) {
-                    if (!PROPERTIES.contains(property.toUpperCase())) {
-                        unavailableProperties.add(property.toUpperCase());
-                    }
+                    if (!PROPERTIES.contains(property.toUpperCase()) &&
+                            !MINUS_PROPERTIES.contains(property.toUpperCase())) unavailableProperties.add(property.toUpperCase());
                     properties.add(property.toUpperCase());
                 }
 
@@ -117,9 +119,14 @@ public class Main {
                     System.out.println();
                 } else { // All properties provided were valid
                     // Checking if some were mutually exclusive
-                    if (areMutuallyExclusive(properties)) {
-                        System.out.println("The request contains mutually exclusive properties: " + properties);
-                        System.out.println("There are no numbers with these properties.\n");
+                    ArrayList<List<String>> mutuallyExclusive = areMutuallyExclusive(properties);
+                    if (!mutuallyExclusive.isEmpty()) {
+                        System.out.print("The request contains mutually exclusive properties: ");
+                        // Print out the mutually exclusive properties
+                        for (List<String> mutuallyExclusiveProperties: mutuallyExclusive) {
+                            System.out.print(mutuallyExclusiveProperties + " ");
+                        }
+                        System.out.println("\nThere are no numbers with these properties.\n");
                     } else { // Everything is good :)
                         ArrayList<String> temp = new ArrayList<String>();
                         temp.add(firstNumber);
@@ -263,14 +270,33 @@ public class Main {
         return counter;
     }
 
-    public static boolean areMutuallyExclusive(List<String> requiredProperties) {
+    public static ArrayList<List<String>> areMutuallyExclusive(List<String> requiredProperties) {
+        ArrayList<List<String>> mutuallyExclusive = new ArrayList<List<String>>();
+
         List<String> m1 = Arrays.asList("ODD", "EVEN");
         List<String> m2 = Arrays.asList("DUCK", "SPY");
         List<String> m3 = Arrays.asList("SUNNY", "SQUARE");
         List<String> m4 = Arrays.asList("SAD", "HAPPY");
+        List<String> m5 = Arrays.asList("-SAD", "-HAPPY");
+        List<String> m6 = Arrays.asList("-EVEN", "-ODD");
 
-        return (requiredProperties.containsAll(m1) || requiredProperties.containsAll(m2)
-                || requiredProperties.containsAll(m3) || requiredProperties.containsAll(m4));
+        // Checking if property and -property (like "SAD" and "-SAD") exist in requiredProperties
+        for (String property: requiredProperties) {
+            if (requiredProperties.contains("-" + property)) {
+                List<String> toAdd = Arrays.asList(property, "-" + property);
+                mutuallyExclusive.add(toAdd);
+            }
+        }
+
+        // Checking if m1 - m6 exist in requiredProperties
+        if (requiredProperties.containsAll(m1)) mutuallyExclusive.add(m1);
+        if (requiredProperties.containsAll(m2)) mutuallyExclusive.add(m2);
+        if (requiredProperties.containsAll(m3)) mutuallyExclusive.add(m3);
+        if (requiredProperties.containsAll(m4)) mutuallyExclusive.add(m4);
+        if (requiredProperties.containsAll(m5)) mutuallyExclusive.add(m5);
+        if (requiredProperties.containsAll(m6)) mutuallyExclusive.add(m6);
+
+        return mutuallyExclusive;
     }
 
     public static void outputProperties(long number) {
