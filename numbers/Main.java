@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class Main {
     static Scanner scanner = new Scanner(System.in);
     static final List<String> PROPERTIES = Arrays.asList("BUZZ", "DUCK", "PALINDROMIC", "GAPFUL", "SPY",
-            "SQUARE", "SUNNY", "JUMPING", "EVEN", "ODD");
+            "SQUARE", "SUNNY", "JUMPING", "HAPPY", "SAD", "EVEN", "ODD");
 
     public static void main(String[] args) {
         // Greeting the user
@@ -224,6 +224,26 @@ public class Main {
         return true;
     }
 
+    public static boolean isHappyNumber(long number) {
+        String stringNumber = String.valueOf(number);
+
+        while (stringNumber.length() != 1) {
+            int sum = 0;
+
+            for (char ch: stringNumber.toCharArray()) {
+                sum += (int) Math.pow(Character.getNumericValue(ch), 2);
+            }
+
+            stringNumber = Integer.toString(sum);
+        }
+
+        return stringNumber.equals("1");
+    }
+
+    public static boolean isSadNumber(long number) {
+        return !isHappyNumber(number);
+    }
+
     public static int numPropertiesSatisfied(List<String> requiredProperties, long number) {
         int counter = 0;
 
@@ -235,6 +255,8 @@ public class Main {
         if (requiredProperties.contains("SQUARE") && isSquareNumber(number)) counter++;
         if (requiredProperties.contains("SUNNY") && isSunnyNumber(number)) counter++;
         if (requiredProperties.contains("JUMPING") && isJumpingNumber(number)) counter++;
+        if (requiredProperties.contains("HAPPY") && isHappyNumber(number)) counter++;
+        if (requiredProperties.contains("SAD") && isSadNumber(number)) counter++;
         if (requiredProperties.contains("EVEN") && isEven(number)) counter++;
         if (requiredProperties.contains("ODD") && isOdd(number)) counter++;
 
@@ -245,14 +267,10 @@ public class Main {
         List<String> m1 = Arrays.asList("ODD", "EVEN");
         List<String> m2 = Arrays.asList("DUCK", "SPY");
         List<String> m3 = Arrays.asList("SUNNY", "SQUARE");
+        List<String> m4 = Arrays.asList("SAD", "HAPPY");
 
-        return (requiredProperties.containsAll(m1) || requiredProperties.containsAll(m2) || requiredProperties.containsAll(m3));
-    }
-
-    public static void outputWrongPropertyMessage(String property) {
-        System.out.println("The property [" + property + "] is wrong.");
-        System.out.println("Available properties: " + PROPERTIES);
-        System.out.println();
+        return (requiredProperties.containsAll(m1) || requiredProperties.containsAll(m2)
+                || requiredProperties.containsAll(m3) || requiredProperties.containsAll(m4));
     }
 
     public static void outputProperties(long number) {
@@ -269,6 +287,8 @@ public class Main {
         if (isSquareNumber(number)) statement.append("square, ");
         if (isSunnyNumber(number)) statement.append("sunny, ");
         if (isJumpingNumber(number)) statement.append("jumping, ");
+        if (isHappyNumber(number)) statement.append("happy, ");
+        if (isSadNumber(number)) statement.append("sad, ");
         if (isEven(number)) statement.append("even");
         if (isOdd(number)) statement.append("odd");
 
@@ -285,6 +305,8 @@ public class Main {
         System.out.println("\tsquare: " + isSquareNumber(number));
         System.out.println("\tsunny: " + isSunnyNumber(number));
         System.out.println("\tjumping: " + isJumpingNumber(number));
+        System.out.println("\thappy: " + isHappyNumber(number));
+        System.out.println("\tsad: " + isSadNumber(number));
         System.out.println("\teven: " + isEven(number));
         System.out.println("\todd: " + isOdd(number));
         System.out.println();
