@@ -18,8 +18,21 @@ This program can identify whether a number has each of the following 12 properti
 - *Jumping*: A number is a jumping number if the adjacent digits inside the number differ by 1. Note that the difference between 9 and 0 is not considered as 1. For example, 78987 and 4343456 are jumping numbers, but 796 and 89098 are not.
 - *Happy*: A number is a happy number if it is a number that reaches 1 after a sequence during which the number is replaced by the sum of each digit squared. For example, 13 is a happy number since __1__^2 + __3__^2 = 10 which leads to __1__^2 + __0__^2 = __1__.
 - *Sad*: A sad number is a number that is not happy.
-
-Once the program starts, the user will be given a list of all possible requests.
+- 
+The program:
+1. Welcomes users;
+2. Displays the instructions;
+3. Asks for a request;
+4. If a user enters an empty request, prints the instructions;
+5. If the user enters zero, terminates the program;
+6. If numbers are not natural, prints the error message;
+7. If an incorrect property is specified, prints the error message and the list of available properties;
+8. For one number, prints the properties of the number;
+9. For two numbers, prints the properties of all numbers in the list (eg: x y; the program prints the properties of y numbers in sequence starting from x);
+10. For two numbers and several properties, prints the list of numbers that contain the specified properties;
+11. If a property is preceded by a minus, this property should not be present in a number;
+12. If the user specifies mutually exclusive properties, aborts the request and warns the user.
+13. Once the request is processed, it continues execution from step 3.
 
 Below is a possible run of the program:
 
